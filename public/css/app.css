@@ -1,0 +1,12 @@
+header{
+    height: 40px;
+}
+
+footer{
+    height: 70px;
+}
+
+table, th, td {
+    border:1px solid black;
+}
+
