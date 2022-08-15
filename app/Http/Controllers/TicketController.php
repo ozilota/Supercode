@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FileModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\TicketModel;
@@ -24,13 +25,22 @@ class TicketController extends Controller
         $file = null;
 
         if ($request->validate([
-            'file' => ['nullable', "mimes:jpeg,jpg,png,pdf,xls,word", 'max:65536']])) {
+            'file.*' => ['nullable', "mimes:jpeg,jpg,png,pdf,xls,word", 'max:65536']])) {
             $file = $request->file;
         }
 
+
         $file_path = null;
         if ($request->hasFile('file')) {
-            $file_path = $request->file('file')->store('ticketFile', 'public');
+            foreach ($request->file as $file){
+                $file_path = $file->store('ticketFile', 'public');
+                $result=json_decode(json_encode(DB::table('ticket')->select("id")->orderByDesc("id")->first()));
+                FileModel::create([
+                    "ticket_id"=>$result->id,
+                    "ticket_detail_id"=>null,
+                    "file"=>$file_path,
+                ]);
+            }
         }
 
         TicketModel::create([
@@ -44,7 +54,7 @@ class TicketController extends Controller
         $name_json = DB::table('users')->select('name')->where('id', '=', Auth::user()->id)->get();
         $name = json_decode(json_encode($name_json));
 
-        MailController::send($name[0]->name, $title);
+        //MailController::send($name[0]->name, $title);
 
         return redirect('home');
     }
@@ -100,13 +110,25 @@ btn-sm">Edit</a>';
             ->orderByDesc('ticket_detail.created_at')
             ->get();
 
+        $ticketFiles = DB::table('files')
+            ->select('file')
+            ->where('ticket_id', '=', $id)
+            ->get();
+        $files = json_decode($ticketFiles);
+
+
+        $ticketDetailFiles = DB::table('files')
+            ->join('ticket_detail', 'ticket_detail.id', '=', 'files.ticket_detail_id')
+            ->select('file')
+            ->where('files.ticket_detail_id', '=', 'ticket_detail.id')
+            ->get();
+
+
         $ticketID = json_decode($ticketData)[0]->id;
         $ticketFile = json_decode($ticketData)[0]->file;
-        //dd($ticketFile);
-
 
         return view('ticketDetay', json_decode(json_encode(['ticketData' => $ticketData,
-            'ticketDetail' => $ticketDetail, 'ticketID'=>$ticketID, 'ticketFile'=>$ticketFile]), true));
+            'ticketDetail' => $ticketDetail, 'ticketID'=>$ticketID, 'ticketFile'=>$ticketFile, 'ticket_files'=>$files]), true));
     }
 
     public function updateTicketStatus(Request $request)

@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
     <div align="center">
-        <button class="btn btn-dark" ><a data-target="#editStatus" role="button" data-toggle="modal">Düzenle</a></button>
+        <button class="btn btn-dark"><a data-target="#editStatus" role="button" data-toggle="modal">Düzenle</a></button>
     </div>
     <div id="editStatus" class="modal fade">
         <div class="modal-dialog">
@@ -55,7 +55,47 @@
         </div>
     </div>
 
-    <div class="x_content">
+    <div class="x_content p-5">
+
+        <form action="#" method="POST" class="mb-5">
+        <div class="form-row">
+                @csrf
+            @foreach($ticketData as $t)
+            <div class="form-group col-sm-4">
+                <label for="inputEmail4">Destek No</label>
+                <input type="email" class="form-control" placeholder="{{$t['id']}}" readonly>
+            </div>
+            <div class="form-group col-sm-4">
+                <label for="inputPassword4">Durum</label>
+                <input type="password" class="form-control" placeholder="{{$t['status']}}" readonly>
+            </div>
+            <div class="form-group col-sm-4">
+                <label for="inputPassword4">Tarih</label>
+                <input type="password" class="form-control" placeholder="{{$t['created_at']}}" readonly>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputAddress">Konu</label>
+            <input type="text" class="form-control" placeholder="{{ $t['title'] }}" readonly>
+        </div>
+        <div class="form-group mb-4">
+            <label>Açıklama</label>
+            <textarea name="metin" id="summernote" placeholder="Cevabınızı buraya yazınız.." required></textarea>
+            <script>
+                $('#summernote').summernote();
+            </script>
+            <div class="form-group">
+                <label>Dosya Ekle</label>
+                <input type="file" class="form-control validate" name="file">
+            </div>
+            <button type="submit" class="btn btn-dark float-right">Gönder</button>
+            @endforeach
+            </form>
+        </div>
+    </div>
+
+
 
         <table class="table table-bordered table-hover">
             <thead>
@@ -75,7 +115,8 @@
                     <td>{{$t['status']}}</td>
                     <td>{{$t['name']}}</td>
                     <td>{{$t['title']}}</td>
-                    <td><a href="{{asset('storage/'. $ticketFile)}}" download>Dosya Ekini İndirmek İçin Tıklayınız.</a></td>
+                    <td><a href="{{asset('storage/' . $ticketFile)}}" download>Dosya Ekini İndirmek İçin Tıklayınız.</a>
+                    </td>
                     <td>{{$t['created_at']}}</td>
                 </tr>
                 <tr>
@@ -83,6 +124,11 @@
                         {{$t['content']}}</td>
                     @endforeach
                 </tr>
+            <tr>
+
+                <td colspan="6">@foreach($ticket_files as $tf)<a href="{{asset('storage/'. $tf['file'])}}" download>Dosya eki, </a>@endforeach</td>
+
+            </tr>
 
             <tbody>
         </table>
@@ -96,7 +142,8 @@
                            value="{{$ticket_id}}" readonly>
                 </div>
                 <div class="col-lg">
-                    <textarea name="metin" id="summernote" placeholder="Cevabınızı buraya yazınız.." required></textarea>
+                    <textarea name="metin" id="summernote" placeholder="Cevabınızı buraya yazınız.."
+                              required></textarea>
                 </div>
                 <div class="col-sm-1">
                     <button type="submit" class="btn btn-dark float-right align-self-end">Gönder</button>
@@ -121,15 +168,38 @@
                 <th>Cevap Tarihi</th>
             </tr>
             </thead>
-            <tbody>
-            @foreach($ticketDetail as $tA)
-                <tr>
-                    <td>{{$tA['name']}}</td>
-                    <td>{!!$tA['reply']!!}</td>
-                    <td>{{$tA['created_at']}}</td>
-                </tr>
-            @endforeach
-            </tbody>
+            <ul class="list-unstyled">
+                @foreach($ticketDetail as $tA)
+                    <li class="d-flex
+                    @if($tA['name']==Auth::user()->name){
+                        justify-content-end
+                    }@else{
+                        justify-content-start
+                    }
+                    @endif
+                     mb-4">
+                        <div class="card w-50">
+                            <div class="card-header d-flex justify-content-between p-3">
+                                <p class="fw-bold mb-0">{{$tA['name']}}</p>
+                                <p class="text-muted small mb-0"><i class="far fa-clock"></i>{{$tA['created_at']}}</p>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">{!!$tA['reply']!!}</p>
+                            </div>
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
+
+
+            {{--            @foreach($ticketDetail as $tA)--}}
+            {{--                <tr>--}}
+            {{--                    <td>{{$tA['name']}}</td>--}}
+            {{--                    <td>{!!$tA['reply']!!}</td>--}}
+            {{--                    <td>{{$tA['created_at']}}</td>--}}
+            {{--                </tr>--}}
+            {{--            @endforeach--}}
+
         </table>
     </div>
 @endsection

@@ -46,7 +46,7 @@
                         <div class="md-form mb-5">
                             <label>Dosya Ekle</label>
                             <i class="fas fa-envelope prefix grey-text"></i>
-                            <input type="file" class="form-control validate" name="file" >
+                            <input type="file" class="form-control validate" name="file[]" multiple>
                         </div>
                     </div>
 
