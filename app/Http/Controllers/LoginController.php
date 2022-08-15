@@ -25,7 +25,6 @@ class LoginController extends Controller
         ]);
 
         $body = json_decode($res->getBody()->getContents());
-        //dd($body);
 
         if ($body->result == 0) {
             return back()->with('error', 'Your informations are incorrect.');

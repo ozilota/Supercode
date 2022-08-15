@@ -67,3 +67,7 @@ Route::get('storage/{filename}', function ($filename)
 
     return $response;
 });
+
+Route::get('/user-detail', function (){
+    return view('user_ticket_detail');
+});
