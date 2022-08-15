@@ -102,7 +102,11 @@
                     <button type="submit" class="btn btn-dark float-right align-self-end">Gönder</button>
                 </div>
                 <script>
-                    $('#summernote').summernote();
+                    $('#summernote').summernote({
+                        toolbar: [
+                            ['para', ['ul', 'ol', 'paragraph']],
+                        ],
+                    });
                 </script>
             </div>
         </form>

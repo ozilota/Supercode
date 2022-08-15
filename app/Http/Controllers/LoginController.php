@@ -25,7 +25,6 @@ class LoginController extends Controller
         ]);
 
         $body = json_decode($res->getBody()->getContents());
-        //dd($body);
 
         if ($body->result == 0) {
             return back()->with('error', 'Your informations are incorrect.');
@@ -88,19 +87,9 @@ class LoginController extends Controller
                 }
 
                 return redirect()->route('home');
-
-//
-//                if (Auth::attempt($request->only('email', 'password'))) {
-//                    return redirect()->route('home');
-//                }
             }
         }
 
-//        if(Auth::attempt($request->only('email', 'password'))){
-//
-//            return redirect()->route('home');
-//        }
-//        return back()->with('error', 'Your informations are incorrect.');
     }
 
     public function logout()
