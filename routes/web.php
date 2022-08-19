@@ -33,7 +33,7 @@ Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/ticket/{id}', [TicketController::class, 'getTicketDetails'])->name('ticketDetail')
     ->middleware('auth');
 
-Route::post('/answer', [TicketDetayController::class, 'addNewAnswer'])->name('newAnswer');
+Route::post('/answer', [TicketController::class, 'addNewAnswer'])->name('newAnswer');
 
 Route::get('/newTicket', function () {
     return view('newTicket');
@@ -48,7 +48,7 @@ Route::get('edit', function(){
     return view('edit');
 });
 
-Route::post('updateTicket', [TicketController::class, 'updateTicketStatus'])->name('updateTicket');
+Route::post('/resolveTicket', [TicketController::class, 'resolveTicket'])->name('resolveTicket');
 
 
 Route::get('storage/{filename}', function ($filename)

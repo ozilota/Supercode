@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TicketModel extends Model
+class Resolvement extends Model
 {
     use HasFactory;
 
-    protected $table="ticket";
+    protected $table="resolvement";
     protected $fillable=[
-        "creator_id",
-        "title",
-        "content",
-        "status",
-        "parent_id",
+        "ticket_id",
+        "resolver_id",
+        "spent_time",
+        "resolvement_type",
+        "description",
         "created_at",
         "updated_at",
     ];
