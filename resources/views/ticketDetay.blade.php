@@ -9,42 +9,73 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
-    <div align="center">
-        <button class="btn btn-dark"><a data-target="#editStatus" role="button" data-toggle="modal">Düzenle</a></button>
+    @if(Auth::user()->is_admin)
+    <div>
+        <button class="btn btn-dark d-flex justify-content-end"><a data-target="#editStatus" role="button"
+                                                                   data-toggle="modal"> Çözümle </a></button>
     </div>
+
     <div id="editStatus" class="modal fade">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered ">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h4 class="modal-title">Ticket Durumu Güncelle</h4>
+                    <h4 class="modal-title">Çözümleme Merkezi</h4>
                     <button type="button" class="btn-close" aria-label="Close" data-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
-                    <form action="{{ route('updateTicket') }}" method="post">
+                    <form action="{{ route('resolveTicket') }}" method="post">
                         @csrf
-                        <div class="border border-dark">
-                            <label class="align-content-md-end">Güncelleme Tarihi: <?php use Carbon\Carbon;
-                                echo Carbon::now(+3);?></label>
+                        <div class="form-row">
+                            <div class="form-group col-5">
+                                <p class="font-bold">Çözüm Tarihi: @php echo Illuminate\Support\Carbon::now(+3); @endphp</p>
+                            </div>
+                            <div class="col-2">
+                                <label>Çözüm süresi(saat)</label>
+                                <select class="form-select" name="spent_time" aria-label="Default select example">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-5" >
+                                <label>Çözüm tipi</label>
+                                <select class="form-select" name="status" aria-label="Default select example">
+                                    <option value="Yanıt Bekliyor">Yanıt Bekliyor</option>
+                                    <option value="İşlemde">İşlemde</option>
+                                    <option value="Kapalı">Kapalı</option>
+                                </select>
+                            </div>
                         </div>
-                        <br/>
+
                         <div>
-                            <label>Ticket ID: </label>
-                            <input type="text" class="form-control" placeholder="{{$ticketID}}" name="ticket_id"
+                            <input type="hidden" class="form-control" placeholder="{{$ticketID}}" name="ticket_id"
                                    value="{{$ticketID}}" readonly>
                         </div>
-                        <br/>
-                        <label>Status</label>
-                        <select class="form-select" name="status" aria-label="Default select example">
-                            <option value="1">Yanıt Bekliyor</option>
-                            <option value="2">İşlemde</option>
-                            <option value="3">Kapalı</option>
-                        </select>
-                        <br/>
+                        <br>
+
+                        <label>Çözüm metni</label>
                         <div class="form-floating">
-                            <textarea class="form-control" name="metin" id="floatingTextarea"></textarea>
-                            <label for="floatingTextarea"></label>
+                            <textarea class="form-control"></textarea>
                         </div>
                         <br/>
                         <button type="submit" class="btn btn-dark">Güncelle</button>
@@ -54,120 +85,69 @@
             </div>
         </div>
     </div>
+    @endif
 
     <div class="x_content p-5">
 
-        <form action="#" method="POST" class="mb-5">
-        <div class="form-row">
-                @csrf
-            @foreach($ticketData as $t)
-            <div class="form-group col-sm-4">
-                <label for="inputEmail4">Destek No</label>
-                <input type="email" class="form-control" placeholder="{{$t['id']}}" readonly>
-            </div>
-            <div class="form-group col-sm-4">
-                <label for="inputPassword4">Durum</label>
-                <input type="password" class="form-control" placeholder="{{$t['status']}}" readonly>
-            </div>
-            <div class="form-group col-sm-4">
-                <label for="inputPassword4">Tarih</label>
-                <input type="password" class="form-control" placeholder="{{$t['created_at']}}" readonly>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="inputAddress">Konu</label>
-            <input type="text" class="form-control" placeholder="{{ $t['title'] }}" readonly>
-        </div>
-        <div class="form-group mb-4">
-            <label>Açıklama</label>
-            <textarea name="metin" id="summernote" placeholder="Cevabınızı buraya yazınız.." required></textarea>
-            <script>
-                $('#summernote').summernote();
-            </script>
-            <div class="form-group">
-                <label>Dosya Ekle</label>
-                <input type="file" class="form-control validate" name="file">
-            </div>
-            <button type="submit" class="btn btn-dark float-right">Gönder</button>
-            @endforeach
-            </form>
-        </div>
-    </div>
-
-
-
-        <table class="table table-bordered table-hover">
-            <thead>
-            <tr>
-                <th>Destek No</th>
-                <th>Durum</th>
-                <th>Oluşturan</th>
-                <th>Konu</th>
-                <th>Dosya Eki</th>
-                <th>Kayıt Tarihi</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($ticketData as $t)
-                <tr>
-                    <td>{{$ticket_id = $t['id']}}</td>
-                    <td>{{$t['status']}}</td>
-                    <td>{{$t['name']}}</td>
-                    <td>{{$t['title']}}</td>
-                    <td><a href="{{asset('storage/' . $ticketFile)}}" download>Dosya Ekini İndirmek İçin Tıklayınız.</a>
-                    </td>
-                    <td>{{$t['created_at']}}</td>
-                </tr>
-                <tr>
-                    <td class="align-self-center border border-dark" colspan="6">
-                        {{$t['content']}}</td>
-                    @endforeach
-                </tr>
-            <tr>
-
-                <td colspan="6">@foreach($ticket_files as $tf)<a href="{{asset('storage/'. $tf['file'])}}" download>Dosya eki, </a>@endforeach</td>
-
-            </tr>
-
-            <tbody>
-        </table>
-    </div>
-    <div style="margin: 30px;">
-        <form action="{{route('newAnswer')}}" method="post" class="h-100">
+        <form action="{{route('newAnswer')}}" method="post" class="mb-5" enctype="multipart/form-data">
             @csrf
             <div class="form-row">
-                <div class="col-1">
-                    <input type="text" class="form-control" placeholder="{{$ticket_id}}" name="ticket_id"
-                           value="{{$ticket_id}}" readonly>
+                @foreach($ticketData as $t)
+                    <div class="form-group col-sm-4">
+                        <label>Destek No</label>
+                        <input type="text" class="form-control" placeholder="{{$t['id']}}" name="ticket_id"
+                               value="{{$t['id']}}" readonly>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>Durum</label>
+                        <input type="text" class="form-control" placeholder="{{$t['status']}}" readonly>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>Tarih</label>
+                        <input type="text" class="form-control" placeholder="{{$t['created_at']}}" readonly>
+                    </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-sm-6">
+                    <label>Konu</label>
+                    <input type="text" class="form-control" placeholder="{{ $t['title'] }}" readonly>
                 </div>
-                <div class="col-lg">
-                    <textarea name="metin" id="summernote" placeholder="Cevabınızı buraya yazınız.."
-                              required></textarea>
+                <div class="form-group col-sm-6 rounded-left">
+                    <label>Dosyalar</label>
+                    <div>@foreach($ticket_files as $tf)<a href="{{asset('storage/'. $tf['file'])}}" download>Dosya eki
+                            | </a>@endforeach</div>
                 </div>
-                <div class="col-sm-1">
-                    <button type="submit" class="btn btn-dark float-right align-self-end">Gönder</button>
-                </div>
+            </div>
+            <div class="form-group">
+                <label>Açıklama</label>
+                <span class="form-text">{{$t['content']}}</span>
+            </div>
+            @endforeach
+            <hr>
+            <br>
+
+            <div class="form-group mb-4">
+                <label>Cevap</label>
+                <textarea name="ticket_content" id="summernote" required></textarea>
                 <script>
-                    $('#summernote').summernote({
-                        toolbar: [
-                            ['para', ['ul', 'ol', 'paragraph']],
-                        ],
-                    });
+                    $('#summernote').summernote();
                 </script>
+                <div class="form-group">
+                    <label>Dosya Ekle</label>
+                    <i class="fas fa-envelope prefix grey-text"></i>
+                    <input type="file" class="form-control validate" name="file[]" multiple>
+                </div>
+                <button type="submit" class="btn btn-dark float-right">Gönder</button>
             </div>
         </form>
     </div>
 
+    <hr>
+    <br>
+
     <div class="x_content">
         <table class="table table-dark table-hover">
-            <thead>
-            <tr>
-                <th>Cevaplayan</th>
-                <th>Mesaj</th>
-                <th>Cevap Tarihi</th>
-            </tr>
-            </thead>
             <ul class="list-unstyled">
                 @foreach($ticketDetail as $tA)
                     <li class="d-flex
@@ -177,29 +157,25 @@
                         justify-content-start
                     }
                     @endif
-                     mb-4">
-                        <div class="card w-50">
+                        mb-4 m-4">
+                        <div class="card w-50 ml-3 mr-3">
                             <div class="card-header d-flex justify-content-between p-3">
                                 <p class="fw-bold mb-0">{{$tA['name']}}</p>
                                 <p class="text-muted small mb-0"><i class="far fa-clock"></i>{{$tA['created_at']}}</p>
                             </div>
+
                             <div class="card-body">
-                                <p class="mb-0">{!!$tA['reply']!!}</p>
+                                <p class="mb-0">{!!$tA['content']!!}</p>
+                            </div>
+
+                            <div class="card-body">
+                                <label class="d-flex justify-content-end">Dosya Ekleri</label>
+                                <p class="d-flex justify-content-end"><a href="#" download>Dosya eki </a></p>
                             </div>
                         </div>
                     </li>
                 @endforeach
             </ul>
-
-
-            {{--            @foreach($ticketDetail as $tA)--}}
-            {{--                <tr>--}}
-            {{--                    <td>{{$tA['name']}}</td>--}}
-            {{--                    <td>{!!$tA['reply']!!}</td>--}}
-            {{--                    <td>{{$tA['created_at']}}</td>--}}
-            {{--                </tr>--}}
-            {{--            @endforeach--}}
-
         </table>
     </div>
 @endsection
