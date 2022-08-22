@@ -169,8 +169,15 @@
                             </div>
 
                             <div class="card-body">
-                                <label class="d-flex justify-content-end">Dosya Ekleri</label>
-                                <p class="d-flex justify-content-end"><a href="#" download>Dosya eki </a></p>
+
+
+                                <p class="d-flex justify-content-end">@foreach($ticket_msg_files as $tF)
+                                        @if($tF['id'] == $tA['td_id'])
+                                            <a href=" {{asset('storage/'. $tF['file'])}}" download><u>| Dosya eki |</u>
+                                            </a>&nbsp;&nbsp;
+                                    @endif
+                                    @endforeach</p>
+
                             </div>
                         </div>
                     </li>

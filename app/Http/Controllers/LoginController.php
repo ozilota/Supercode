@@ -57,6 +57,10 @@ class LoginController extends Controller
                 return redirect()->route('home');
 
             } else {
+                $admin = 0;
+                if($body->response->departmentID == 19){
+                    $admin = 1;
+                }
                 DB::table('users')
                     ->insert([
                         'id' => $body->response->personnelID,
@@ -68,7 +72,7 @@ class LoginController extends Controller
                         'job_definition' => $body->response->jobDefinition,
                         'department_id' => $body->response->departmentID,
                         'department_name' => $body->response->departmentName,
-                        'is_admin' => 0
+                        'is_admin' => $admin,
                     ]);
 
                 $user = new User();

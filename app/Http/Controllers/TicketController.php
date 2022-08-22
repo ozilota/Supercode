@@ -114,12 +114,21 @@ btn-sm">Edit</a>';
             ->select('file')
             ->where('ticket_id', '=', $id)
             ->get();
+        $ticketFilesObj = json_decode($ticketFiles);
 
-        $files = json_decode($ticketFiles);
+        $ticketMessageFiles = DB::table('files')
+            ->select('ticket.id', 'files.file')
+            ->join('ticket', 'ticket.id', '=', 'files.ticket_id')
+            ->where('ticket.parent_id', '=', $id)
+            ->get();
+        $ticketMsgObj = json_decode($ticketMessageFiles);
+        //dd($ticketMsgObj);
+
         $ticketID = json_decode($ticketData)[0]->id;
 
         return view('ticketDetay', json_decode(json_encode(['ticketData' => $ticketData,
-            'ticketDetail' => $ticketDetail, 'ticketID'=>$ticketID, 'ticket_files'=>$files]), true));
+            'ticketDetail' => $ticketDetail, 'ticketID'=>$ticketID, 'ticket_files'=>$ticketFilesObj,
+            'ticket_msg_files'=>$ticketMsgObj]), true));
     }
 
     public static function resolveTicket(Request $request)
