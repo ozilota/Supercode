@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FileModel;
+use App\Models\Resolvement;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\TicketModel;
@@ -137,14 +138,15 @@ btn-sm">Edit</a>';
             "status" => $request->status
         ]);
 
-        DB::table('ticket_detail')->insert([
-            "creator_id"    => Auth::id(),
+        Resolvement::create([
+            "resolver_id"    => Auth::id(),
             "ticket_id"     => $request->ticket_id,
-            "reply"         => $request->metin,
+            "description"         => $request->description,
+            "resolvement_type" => $request->status,
+            "spent_time" => $request->spent_time,
         ]);
 
         return back();
-        //->withInput($request->ticket_id)
     }
 
     public function addNewAnswer(Request $request)

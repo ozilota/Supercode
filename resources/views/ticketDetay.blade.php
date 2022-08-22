@@ -60,9 +60,9 @@
                             <div class="form-group col-5" >
                                 <label>Çözüm tipi</label>
                                 <select class="form-select" name="status" aria-label="Default select example">
-                                    <option value="Yanıt Bekliyor">Yanıt Bekliyor</option>
-                                    <option value="İşlemde">İşlemde</option>
-                                    <option value="Kapalı">Kapalı</option>
+                                    <option value="1">Yanıt Bekliyor</option>
+                                    <option value="2">İşlemde</option>
+                                    <option value="3">Kapalı</option>
                                 </select>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
 
                         <label>Çözüm metni</label>
                         <div class="form-floating">
-                            <textarea class="form-control"></textarea>
+                            <textarea name="description" class="form-control"></textarea>
                         </div>
                         <br/>
                         <button type="submit" class="btn btn-dark">Güncelle</button>
