@@ -123,7 +123,6 @@ btn-sm">Edit</a>';
             ->where('ticket.parent_id', '=', $id)
             ->get();
         $ticketMsgObj = json_decode($ticketMessageFiles);
-        //dd($ticketMsgObj);
 
         $ticketID = json_decode($ticketData)[0]->id;
 
@@ -153,14 +152,6 @@ btn-sm">Edit</a>';
     {
         $file = null;
         $file_path = null;
-
-        DB::table('ticket')->insert([
-            "creator_id"    => Auth::id(),
-            "parent_id"     => $request->ticket_id,
-            "title"         => null,
-            "content"       => $request->ticket_content,
-        ]);
-
         if ($request->validate([
             'file.*' => ['nullable', "mimes:jpeg,jpg,png,pdf,xls,word", 'max:65536']])) {
             $file = $request->file;
@@ -181,6 +172,15 @@ btn-sm">Edit</a>';
                 ]);
             }
         }
+
+        DB::table('ticket')->insert([
+            "creator_id"    => Auth::id(),
+            "parent_id"     => $request->ticket_id,
+            "title"         => null,
+            "content"       => $request->ticket_content,
+        ]);
+
+
         return back();
     }
 }
